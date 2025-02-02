@@ -1,0 +1,2 @@
+# cooking_assist
+ The Cooking Assist App is developed using the Flutter framework for a seamless cross-platform experience, with Firebase powering the backend for efficient data management and real-time updates. This app is designed to assist individuals who are new to cooking by providing step-by-step guidance, while also offering useful features for experienced cooks to enhance their skills and streamline their cooking process.
