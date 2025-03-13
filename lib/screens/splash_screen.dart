@@ -19,13 +19,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 20),
-            const Text(
+            SizedBox(height: 20),
+            Text(
               'Cooking Assist',
               style: TextStyle(
                 fontSize: 24,
@@ -33,8 +33,8 @@ class _SplashScreenState extends State<SplashScreen> {
                 color: Colors.grey,
               ),
             ),
-            const SizedBox(height: 10),
-            const CircularProgressIndicator(color: Colors.grey),
+            SizedBox(height: 10),
+            CircularProgressIndicator(color: Colors.grey),
           ],
         ),
       ),

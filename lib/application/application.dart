@@ -6,7 +6,7 @@ class CookingAsist extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       title: 'Cooking Asist',
       home: SplashScreen(),
     );
