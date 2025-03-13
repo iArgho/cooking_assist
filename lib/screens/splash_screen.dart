@@ -2,6 +2,7 @@ import 'package:cooking_assist/utility/path_utility.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,26 +23,40 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              Assets.logo,
-              width: 250,
-           
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                     const SizedBox(height: 120),
+                SvgPicture.asset(
+                  Assets.logo,
+                  width: 270,
+                  fit: BoxFit.contain,
+                ),
+                Text(
+                  'Cooking Assistance',
+                  style: TextStyle(
+                    fontSize: 34,
+                    fontWeight: FontWeight.w400,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              ],
             ),
-  
-            const Text(
-              'Cooking Assist',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey,
-              ),
+          ),
+          const SizedBox(height: 100), // Space before the loader
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: LoadingAnimationWidget.staggeredDotsWave(
+              color: Theme.of(context).primaryColor,
+              size: 40,
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 50), // Extra padding from bottom
+        ],
       ),
     );
   }
