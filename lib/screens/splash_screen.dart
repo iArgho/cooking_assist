@@ -1,5 +1,7 @@
+import 'package:cooking_assist/utility/path_utility.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,13 +21,18 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 20),
-            Text(
+            SvgPicture.asset(
+              Assets.logo,
+              width: 250,
+           
+            ),
+  
+            const Text(
               'Cooking Assist',
               style: TextStyle(
                 fontSize: 24,
@@ -33,8 +40,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 color: Colors.grey,
               ),
             ),
-            SizedBox(height: 10),
-            CircularProgressIndicator(color: Colors.grey),
           ],
         ),
       ),
