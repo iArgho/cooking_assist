@@ -24,3 +24,10 @@ flutter:
 
   assets:
     - lib/assets/images/cooking_assistant_logo.svg
+
+  fonts:
+    - family: Caveat
+      fonts:
+        - asset: lib/assets/fonts/Caveat-Regular.ttf
+        - asset: lib/assets/fonts/Caveat-Bold.ttf
+          weight: 700

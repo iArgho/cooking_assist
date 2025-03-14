@@ -36,18 +36,19 @@ class _SplashScreenState extends State<SplashScreen> {
                   width: 270,
                   fit: BoxFit.contain,
                 ),
-                Text(
-                  'Cooking Assistance',
-                  style: TextStyle(
-                    fontSize: 34,
-                    fontWeight: FontWeight.w400,
+             Text(
+                    'Cooking Assistant',
+                    style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Caveat',
                     color: Theme.of(context).primaryColor,
                   ),
-                ),
+                ),   
               ],
             ),
           ),
-          const SizedBox(height: 100), // Space before the loader
+          const SizedBox(height: 100),
           Align(
             alignment: Alignment.bottomCenter,
             child: LoadingAnimationWidget.staggeredDotsWave(
@@ -55,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
               size: 40,
             ),
           ),
-          const SizedBox(height: 50), // Extra padding from bottom
+          const SizedBox(height: 50),
         ],
       ),
     );
