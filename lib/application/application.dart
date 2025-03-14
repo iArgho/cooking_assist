@@ -1,4 +1,4 @@
-import 'package:cooking_assist/screens/splash_screen.dart';
+import 'package:cooking_assist/presentation/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 class CookingAssist extends StatelessWidget {
