@@ -1,6 +1,6 @@
 import 'package:cooking_assist/presentation/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart'; // Import GetX
+import 'package:get/get.dart';
 
 class CookingAssist extends StatelessWidget {
   const CookingAssist({super.key});
@@ -11,10 +11,11 @@ class CookingAssist extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Cooking Assist',
       theme: ThemeData(
-        primaryColor: const Color(0xFFF57758),
+        fontFamily: 'Caveat',
+        primaryColor: const Color(0xFF0BDA51),
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFFF57758),
+          backgroundColor:   Color(0xFF0BDA51),
           foregroundColor: Colors.white,
         ),
         textTheme: const TextTheme(
@@ -23,18 +24,19 @@ class CookingAssist extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFFF57758),
+            backgroundColor:  const Color(0xFF0BDA51),
             foregroundColor: Colors.white,
             textStyle: const TextStyle(fontWeight: FontWeight.w400),
           ),
         ),
       ),
       darkTheme: ThemeData(
+        fontFamily: 'Caveat',
         brightness: Brightness.dark,
-        primaryColor: const Color(0xFFF57758),
+        primaryColor:  const Color(0xFF0BDA51),
         scaffoldBackgroundColor: Colors.black,
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFFF57758),
+          backgroundColor:  const Color(0xFF0BDA51),
           foregroundColor: Colors.white,
         ),
         textTheme: const TextTheme(
@@ -43,7 +45,7 @@ class CookingAssist extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFFF57758),
+            backgroundColor:  const Color(0xFF0BDA51),
             foregroundColor: Colors.white,
           ),
         ),
