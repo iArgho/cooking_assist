@@ -1,13 +1,13 @@
 import 'package:cooking_assist/presentation/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart'; // Import GetX
 
 class CookingAssist extends StatelessWidget {
   const CookingAssist({super.key});
 
   @override
   Widget build(BuildContext context) {
-    
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Cooking Assist',
       theme: ThemeData(
