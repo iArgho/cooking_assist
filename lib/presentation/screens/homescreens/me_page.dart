@@ -31,7 +31,7 @@ class MePage extends StatelessWidget {
     );
   }
 
-  // Profile Header with Image
+
   Widget _buildHeader(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
@@ -155,7 +155,6 @@ class MePage extends StatelessWidget {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              // TODO: Implement logout logic
             },
             child: const Text("Logout", style: TextStyle(color: Colors.red)),
           ),

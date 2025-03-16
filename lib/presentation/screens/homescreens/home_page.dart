@@ -1,7 +1,26 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(viewportFraction: 0.9);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +59,8 @@ class HomePage extends StatelessWidget {
   // What's New Carousel (Alternating Image & Color Block)
   Widget _buildWhatsNewCarousel(BuildContext context) {
     final List<Map<String, String>> newItems = [
-      {"type": "image", "value": "assets/images/new1.jpg"},
       {"type": "color", "value": "Fresh Ingredients, Fresh Taste!"},
-      {"type": "image", "value": "assets/images/new2.jpg"},
       {"type": "color", "value": "Try Our Newest Recipes Today!"},
-      {"type": "image", "value": "assets/images/new3.jpg"},
     ];
 
     return SizedBox(
@@ -52,11 +68,12 @@ class HomePage extends StatelessWidget {
       child: PageView.builder(
         itemCount: newItems.length,
         pageSnapping: true,
-        controller: PageController(viewportFraction: 0.9),
+        controller: _pageController,
         itemBuilder: (context, index) {
           final item = newItems[index];
           if (item["type"] == "image") {
-            return Container(
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 500),
               margin: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
@@ -67,7 +84,8 @@ class HomePage extends StatelessWidget {
               ),
             );
           } else {
-            return Container(
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 500),
               margin: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
