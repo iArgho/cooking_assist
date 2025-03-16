@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(25),
             bottomRight: Radius.circular(25),
           ),
@@ -59,9 +59,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.logout, size: 24, color: Colors.white),
+          icon: const Icon(Icons.logout, size: 24, color: Colors.white),
           onPressed: () {
-            // Add your logout functionality here
+          
           },
         ),
       ],

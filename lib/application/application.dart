@@ -36,7 +36,7 @@ class CookingAssist extends StatelessWidget {
         primaryColor:  const Color(0xFF0BDA51),
         scaffoldBackgroundColor: Colors.black,
         appBarTheme: const AppBarTheme(
-          backgroundColor:  const Color(0xFF0BDA51),
+          backgroundColor:  Color(0xFF0BDA51),
           foregroundColor: Colors.white,
         ),
         textTheme: const TextTheme(
