@@ -13,6 +13,9 @@ class MePage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              const SizedBox(
+          height: 20,
+        ),
               _buildHeader(context),
               const SizedBox(height: 20),
               _buildUserDetails(),
@@ -33,20 +36,11 @@ class MePage extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
+        
         Container(
           height: 180,
           width: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Theme.of(context).primaryColor, Colors.greenAccent],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(30),
-              bottomRight: Radius.circular(30),
-            ),
-          ),
+        
         ),
         Column(
           children: [
@@ -59,11 +53,11 @@ class MePage extends StatelessWidget {
             const SizedBox(height: 8),
             const Text(
               "John Doe",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
             ),
             Text(
               "johndoe@example.com",
-              style: TextStyle(fontSize: 16, color: Colors.white.withOpacity(0.9)),
+              style: TextStyle(fontSize: 16, color: Colors.black.withOpacity(0.9)),
             ),
           ],
         ),
