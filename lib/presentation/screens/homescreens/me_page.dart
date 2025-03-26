@@ -37,7 +37,7 @@ class MePage extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         
-        Container(
+        const SizedBox(
           height: 180,
           width: double.infinity,
         
@@ -57,6 +57,7 @@ class MePage extends StatelessWidget {
             ),
             Text(
               "johndoe@example.com",
+              // ignore: deprecated_member_use
               style: TextStyle(fontSize: 16, color: Colors.black.withOpacity(0.9)),
             ),
           ],
