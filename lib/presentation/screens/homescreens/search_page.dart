@@ -9,28 +9,28 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
-  List<Map<String, dynamic>> _filteredRecipes = [];
+  List<Map<String, String>> _filteredRecipes = [];
 
-  final List<Map<String, dynamic>> _recipes = [
+  final List<Map<String, String>> _recipes = [
     {
       "title": "Spaghetti Carbonara",
       "description": "Classic Italian pasta with creamy sauce.",
-      "icon": Icons.restaurant,
+      "image": "https://source.unsplash.com/200x200/?pasta"
     },
     {
       "title": "Grilled Chicken",
       "description": "Juicy and perfectly grilled chicken breast.",
-      "icon": Icons.local_dining,
+      "image": "https://source.unsplash.com/200x200/?chicken"
     },
     {
       "title": "Avocado Toast",
       "description": "Healthy toast with fresh avocado and eggs.",
-      "icon": Icons.breakfast_dining,
+      "image": "https://source.unsplash.com/200x200/?avocado"
     },
     {
       "title": "Berry Smoothie",
       "description": "A refreshing mix of berries and yogurt.",
-      "icon": Icons.local_cafe,
+      "image": "https://source.unsplash.com/200x200/?smoothie"
     },
   ];
 
@@ -79,19 +79,23 @@ class _SearchPageState extends State<SearchPage> {
             padding: const EdgeInsets.all(10),
             itemCount: _filteredRecipes.length,
             itemBuilder: (context, index) {
+              bool isPrimaryColor = index % 2 == 0;
+
               return Card(
                 elevation: 3,
                 margin: const EdgeInsets.symmetric(vertical: 8),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(10),
-                  leading: CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Theme.of(context).primaryColor,
-                    child: Icon(
-                      _filteredRecipes[index]["icon"],
-                      color: Colors.white,
-                      size: 30,
+                  leading: ClipRRect(
+                    borderRadius: BorderRadius.circular(10),
+                    child: Container(
+                      width: 60,
+                      height: 60,
+                      color: isPrimaryColor ? Theme.of(context).primaryColor : Colors.transparent,
+                      child: isPrimaryColor
+                          ? const Icon(Icons.restaurant, color: Colors.white, size: 30)
+                          : Image.network(_filteredRecipes[index]["image"]!, fit: BoxFit.cover),
                     ),
                   ),
                   title: Text(
@@ -100,7 +104,9 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                   subtitle: Text(_filteredRecipes[index]["description"]!),
                   trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                  onTap: () {},
+                  onTap: () {
+                    // TODO: Navigate to detailed recipe page
+                  },
                 ),
               );
             },
