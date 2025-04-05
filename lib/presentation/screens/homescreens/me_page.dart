@@ -14,8 +14,8 @@ class MePage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(
-          height: 20,
-        ),
+                height: 20,
+              ),
               _buildHeader(context),
               const SizedBox(height: 20),
               _buildUserDetails(),
@@ -31,16 +31,18 @@ class MePage extends StatelessWidget {
     );
   }
 
-
   Widget _buildHeader(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
       children: [
+<<<<<<< Updated upstream
         
         Container(
+=======
+        SizedBox(
+>>>>>>> Stashed changes
           height: 180,
           width: double.infinity,
-        
         ),
         Column(
           children: [
@@ -53,11 +55,19 @@ class MePage extends StatelessWidget {
             const SizedBox(height: 8),
             const Text(
               "John Doe",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
+              style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
             ),
             Text(
               "johndoe@example.com",
+<<<<<<< Updated upstream
               style: TextStyle(fontSize: 16, color: Colors.black.withOpacity(0.9)),
+=======
+              style:
+                  TextStyle(fontSize: 16, color: Colors.black.withOpacity(0.9)),
+>>>>>>> Stashed changes
             ),
           ],
         ),
@@ -82,8 +92,11 @@ class MePage extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: ListTile(
           leading: Icon(icon, color: Colors.blueAccent),
-          title: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-          subtitle: Text(value, style: const TextStyle(fontSize: 14, color: Colors.grey)),
+          title: Text(title,
+              style:
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          subtitle: Text(value,
+              style: const TextStyle(fontSize: 14, color: Colors.grey)),
         ),
       ),
     );
