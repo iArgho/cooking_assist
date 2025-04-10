@@ -3,11 +3,6 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
-<<<<<<< Updated upstream
-  cloud_firestore
-=======
->>>>>>> Stashed changes
-  firebase_core
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

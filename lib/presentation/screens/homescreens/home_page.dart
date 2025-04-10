@@ -9,11 +9,25 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late PageController _pageController;
+  int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(viewportFraction: 0.9);
+    _startAutoScroll();
+  }
+
+  void _startAutoScroll() {
+    Future.delayed(const Duration(seconds: 3), () {
+      if (_pageController.hasClients) {
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+        _startAutoScroll();
+      }
+    });
   }
 
   @override
@@ -30,13 +44,8 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 16),
-
-            // What's New Carousel
             _buildWhatsNewCarousel(context),
-
             const SizedBox(height: 20),
-
-            // Suggestions List
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Text(
@@ -50,13 +59,26 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 10),
             _buildSuggestionsList(),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                "Newly Added Recipes",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            _buildNewlyAddedRecipes(),
           ],
         ),
       ),
     );
   }
 
-  // What's New Carousel (Alternating Image & Color Block)
   Widget _buildWhatsNewCarousel(BuildContext context) {
     final List<Map<String, String>> newItems = [
       {"type": "color", "value": "Fresh Ingredients, Fresh Taste!"},
@@ -66,71 +88,82 @@ class _HomePageState extends State<HomePage> {
     return SizedBox(
       height: 200,
       child: PageView.builder(
-        itemCount: newItems.length,
-        pageSnapping: true,
         controller: _pageController,
+        onPageChanged: (index) {
+          setState(() {
+            _currentPage = index % newItems.length;
+          });
+        },
         itemBuilder: (context, index) {
-          final item = newItems[index];
-          if (item["type"] == "image") {
-            return AnimatedContainer(
-              duration: const Duration(milliseconds: 500),
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                image: DecorationImage(
-                  image: AssetImage(item["value"]!),
-                  fit: BoxFit.cover,
-                ),
+          final item = newItems[index % newItems.length];
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 500),
+            margin: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Center(
+              child: Text(
+                item["value"]!,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
               ),
-            );
-          } else {
-            return AnimatedContainer(
-              duration: const Duration(milliseconds: 500),
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Center(
-                child: Text(
-                  item["value"]!,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-              ),
-            );
-          }
+            ),
+          );
         },
       ),
     );
   }
 
-  // Suggestions List
   Widget _buildSuggestionsList() {
-    final List<Map<String, String>> suggestions = [
-      {"title": "Easy Pasta Recipe", "image": "assets/images/suggestion1.jpg"},
-      {"title": "Healthy Smoothies", "image": "assets/images/suggestion2.jpg"},
-      {"title": "Best Baking Tips", "image": "assets/images/suggestion3.jpg"},
+    final List<Map<String, dynamic>> items = [
+      {"title": "Easy Pasta Recipe", "icon": Icons.restaurant},
+      {"title": "Healthy Smoothies", "icon": Icons.local_drink},
+      {"title": "Best Baking Tips", "icon": Icons.cake},
     ];
 
-    return ListView.builder(
+    return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: suggestions.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          leading: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.asset(suggestions[index]["image"]!, width: 50, height: 50, fit: BoxFit.cover),
+      children: [
+        for (int i = 0; i < 5; i++)
+          ListTile(
+            leading: Icon(items[i % items.length]["icon"], size: 40, color: Theme.of(context).primaryColor),
+            title: Text(
+              items[i % items.length]["title"]!,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            ),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
+            onTap: () {},
           ),
-          title: Text(suggestions[index]["title"]!,
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500)),
-          trailing: const Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
-          onTap: () {
-            // Handle tap event
-          },
-        );
-      },
+      ],
+    );
+  }
+
+  Widget _buildNewlyAddedRecipes() {
+    final List<Map<String, dynamic>> newRecipes = [
+      {"title": "Spicy Tacos", "icon": Icons.local_dining},
+      {"title": "Avocado Toast", "icon": Icons.breakfast_dining},
+      {"title": "Homemade Pizza", "icon": Icons.local_pizza},
+    ];
+
+    return ListView(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      children: [
+        for (var recipe in newRecipes)
+          ListTile(
+            leading: Icon(recipe["icon"], size: 40, color: Theme.of(context).primaryColor),
+            title: Text(
+              recipe["title"]!,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+            ),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
+            onTap: () {},
+          ),
+      ],
     );
   }
 }
