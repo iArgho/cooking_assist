@@ -1,10 +1,10 @@
 import 'dart:async';
+import 'package:cooking_assist/presentation/screens/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:cooking_assist/presentation/screens/homescreens/home_screen.dart';
 import 'package:cooking_assist/utility/path_utility.dart';
-import 'package:get/get.dart'; 
+import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void goToNextScreen() {
     Future.delayed(const Duration(seconds: 3)).then((_) {
-      Get.offAll(const HomeScreen()); 
+      Get.offAll(const LoginPage());
     });
   }
 

@@ -1,8 +1,10 @@
+import 'package:cooking_assist/presentation/screens/auth/login_screen.dart';
 import 'package:cooking_assist/presentation/screens/homescreens/home_page.dart';
 import 'package:cooking_assist/presentation/screens/homescreens/me_page.dart';
 import 'package:cooking_assist/presentation/screens/homescreens/recipe_page.dart';
 import 'package:cooking_assist/presentation/screens/homescreens/search_page.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -43,7 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
       flexibleSpace: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Theme.of(context).primaryColor, const Color.fromARGB(255, 29, 222, 129)],
+            colors: [
+              Theme.of(context).primaryColor,
+              const Color.fromARGB(255, 29, 222, 129)
+            ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -55,13 +60,14 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       title: const Text(
         'Cooking Assistant',
-        style: TextStyle(fontSize: 30 , fontWeight: FontWeight.bold, color: Colors.white),
+        style: TextStyle(
+            fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
       ),
       actions: [
         IconButton(
           icon: const Icon(Icons.logout, size: 24, color: Colors.white),
           onPressed: () {
-          
+            Get.offAll(const LoginPage());
           },
         ),
       ],
@@ -70,8 +76,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   BottomNavigationBar _buildBottomNavBar() {
     return BottomNavigationBar(
- 
-
       currentIndex: _selectedIndex,
       selectedItemColor: Theme.of(context).primaryColor,
       unselectedItemColor: Colors.grey[600],
