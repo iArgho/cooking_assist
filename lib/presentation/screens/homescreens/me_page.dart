@@ -1,104 +1,66 @@
+import 'package:cooking_assist/auth/auth.dart';
+import 'package:cooking_assist/presentation/screens/authScreens/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class MePage extends StatelessWidget {
   const MePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[100],
-      body: SafeArea(
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(
-          height: 20,
-        ),
-              _buildHeader(context),
-              const SizedBox(height: 20),
-              _buildUserDetails(),
-              const SizedBox(height: 20),
-              _buildSettingsList(context),
-              const SizedBox(height: 20),
-              _buildLogoutButton(context),
-              const SizedBox(height: 30),
-            ],
+    return FutureBuilder(
+      future: Auth().currentUser?.reload(), // 🔁 Refresh user info
+      builder: (context, snapshot) {
+        final user = Auth().currentUser;
+
+        return Scaffold(
+          backgroundColor: Colors.grey[100],
+          body: SafeArea(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 20),
+                  _buildHeader(
+                    context,
+                    user?.displayName ?? "User",
+                    user?.email ?? "No email",
+                  ),
+                  const SizedBox(height: 20),
+                  _buildSettingsList(context),
+                  const SizedBox(height: 20),
+                  _buildLogoutButton(context),
+                  const SizedBox(height: 30),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
-
-  Widget _buildHeader(BuildContext context) {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        
-        const SizedBox(
-          height: 180,
-          width: double.infinity,
-        
-        ),
-        Column(
-          children: [
-            CircleAvatar(
-              radius: 50,
-              backgroundColor: Colors.grey[300],
-              backgroundImage: const NetworkImage(
-                  "https://source.unsplash.com/200x200/?portrait"),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              "John Doe",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black),
-            ),
-            Text(
-              "johndoe@example.com",
-              // ignore: deprecated_member_use
-              style: TextStyle(fontSize: 16, color: Colors.black.withOpacity(0.9)),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  // User Details Section
-  Widget _buildUserDetails() {
+  Widget _buildHeader(BuildContext context, String name, String email) {
     return Column(
       children: [
-        _buildDetailTile(Icons.phone, "Phone", "+1 234 567 890"),
-        _buildDetailTile(Icons.location_on, "Location", "New York, USA"),
+        const SizedBox(height: 8),
+        Text(
+          name,
+          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          email,
+          style: TextStyle(fontSize: 16, color: Colors.black.withOpacity(0.9)),
+        ),
       ],
     );
   }
 
-  Widget _buildDetailTile(IconData icon, String title, String value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        child: ListTile(
-          leading: Icon(icon, color: Colors.blueAccent),
-          title: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-          subtitle: Text(value, style: const TextStyle(fontSize: 14, color: Colors.grey)),
-        ),
-      ),
-    );
-  }
-
-  // Settings List
   Widget _buildSettingsList(BuildContext context) {
     return Column(
       children: [
         _buildSettingsTile(Icons.person, "Edit Profile", () {}),
-        _buildSettingsTile(Icons.lock, "Change Password", () {}),
-        _buildSettingsTile(Icons.notifications, "Notifications", () {}),
-        _buildSettingsTile(Icons.help, "Help & Support", () {}),
-        _buildSettingsTile(Icons.privacy_tip, "Privacy Policy", () {}),
       ],
     );
   }
@@ -107,11 +69,10 @@ class MePage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Card(
-        elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: ListTile(
           leading: Icon(icon, color: Colors.blueAccent),
-          title: Text(title, style: const TextStyle(fontSize: 16)),
+          title: Text(title),
           trailing: const Icon(Icons.arrow_forward_ios, size: 16),
           onTap: onTap,
         ),
@@ -119,7 +80,6 @@ class MePage extends StatelessWidget {
     );
   }
 
-  // Logout Button with Confirmation
   Widget _buildLogoutButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -141,7 +101,6 @@ class MePage extends StatelessWidget {
     );
   }
 
-  // Logout Confirmation Dialog
   void _showLogoutConfirmation(BuildContext context) {
     showDialog(
       context: context,
@@ -154,8 +113,10 @@ class MePage extends StatelessWidget {
             child: const Text("Cancel"),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Navigator.pop(context);
+              await Auth().signOut();
+              Get.offAll(() => const LoginPage());
             },
             child: const Text("Logout", style: TextStyle(color: Colors.red)),
           ),

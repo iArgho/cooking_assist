@@ -1,3 +1,4 @@
+import 'package:cooking_assist/auth/auth.dart';
 import 'package:cooking_assist/presentation/screens/homescreens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -41,16 +42,12 @@ class _SignUpPageState extends State<SignUpPage> {
                   decoration: InputDecoration(
                     labelText: "Full Name",
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                        borderRadius: BorderRadius.circular(10)),
                     prefixIcon: const Icon(Icons.person),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter your name";
-                    }
-                    return null;
-                  },
+                  validator: (value) => value == null || value.isEmpty
+                      ? "Please enter your name"
+                      : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -58,71 +55,61 @@ class _SignUpPageState extends State<SignUpPage> {
                   decoration: InputDecoration(
                     labelText: "Email",
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                        borderRadius: BorderRadius.circular(10)),
                     prefixIcon: const Icon(Icons.email),
                   ),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter your email";
-                    }
-                    return null;
-                  },
+                  validator: (value) => value == null || value.isEmpty
+                      ? "Please enter your email"
+                      : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _passwordController,
+                  obscureText: true,
                   decoration: InputDecoration(
                     labelText: "Password",
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                        borderRadius: BorderRadius.circular(10)),
                     prefixIcon: const Icon(Icons.lock),
                   ),
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.length < 6) {
-                      return "Password must be at least 6 characters";
-                    }
-                    return null;
-                  },
+                  validator: (value) => value == null || value.length < 6
+                      ? "Min 6 characters"
+                      : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _confirmPasswordController,
+                  obscureText: true,
                   decoration: InputDecoration(
                     labelText: "Confirm Password",
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                        borderRadius: BorderRadius.circular(10)),
                     prefixIcon: const Icon(Icons.lock_outline),
                   ),
-                  obscureText: true,
-                  validator: (value) {
-                    if (value != _passwordController.text) {
-                      return "Passwords do not match";
-                    }
-                    return null;
-                  },
+                  validator: (value) => value != _passwordController.text
+                      ? "Passwords do not match"
+                      : null,
                 ),
                 const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        // You'd normally call sign up logic here
-                        Get.offAll(const HomeScreen());
+                ElevatedButton(
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      try {
+                        await Auth().createUserWithEmailAndPassword(
+                          _emailController.text,
+                          _passwordController.text,
+                        );
+                        await Auth().updateDisplayName(_nameController.text);
+                        Get.offAll(() => const HomeScreen());
+                      } catch (e) {
+                        Get.snackbar("Error", e.toString());
                       }
-                    },
-                    child: const Text("Sign Up"),
-                  ),
+                    }
+                  },
+                  child: const Text("Sign Up"),
                 ),
                 TextButton(
-                  onPressed: () {
-                    Get.back(); // Takes user back to login screen
-                  },
+                  onPressed: () => Get.back(),
                   child: const Text("Already have an account? Login"),
                 ),
               ],

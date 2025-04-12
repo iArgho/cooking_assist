@@ -1,4 +1,4 @@
-import 'package:cooking_assist/presentation/screens/auth/login_screen.dart';
+import 'package:cooking_assist/presentation/screens/authScreens/login_screen.dart';
 import 'package:cooking_assist/presentation/screens/homescreens/home_page.dart';
 import 'package:cooking_assist/presentation/screens/homescreens/me_page.dart';
 import 'package:cooking_assist/presentation/screens/homescreens/recipe_page.dart';

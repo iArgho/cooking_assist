@@ -1,4 +1,5 @@
-import 'package:cooking_assist/presentation/screens/auth/signup_screen.dart'
+import 'package:cooking_assist/auth/auth.dart';
+import 'package:cooking_assist/presentation/screens/authScreens/signup_screen.dart'
     show SignUpPage;
 import 'package:cooking_assist/presentation/screens/homescreens/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,10 +18,38 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _login() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        await Auth().signInWithEmailAndPassword(
+          _emailController.text.trim(),
+          _passwordController.text.trim(),
+        );
+        Get.offAll(const HomeScreen());
+      } catch (e) {
+        Get.snackbar(
+          "Login Failed",
+          e.toString(),
+          backgroundColor: Colors.redAccent,
+          colorText: Colors.white,
+          snackPosition: SnackPosition.BOTTOM,
+        );
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Padding(
+        child: SingleChildScrollView(
+          // Avoid overflow on smaller screens
           padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
@@ -73,21 +102,15 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        Get.offAll(const HomeScreen());
-                      }
-                    },
+                    onPressed: _login,
                     child: const Text("Login"),
                   ),
                 ),
                 TextButton(
                   onPressed: () {
-                    // This is typically for password recovery;
-                    // navigating to HomeScreen temporary for testing
-                    Get.offAll(const SignUpPage());
+                    Get.to(() => const SignUpPage());
                   },
-                  child: const Text("Forgot Password?"),
+                  child: const Text("Don't have an account? Sign Up"),
                 ),
               ],
             ),

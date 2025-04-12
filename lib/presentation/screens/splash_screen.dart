@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:cooking_assist/presentation/screens/auth/login_screen.dart';
+import 'package:cooking_assist/presentation/screens/authScreens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
