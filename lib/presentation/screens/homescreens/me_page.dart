@@ -1,4 +1,5 @@
 import 'package:cooking_assist/auth/auth.dart';
+import 'package:cooking_assist/presentation/screens/authScreens/edit_profile_screen.dart';
 import 'package:cooking_assist/presentation/screens/authScreens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -47,11 +48,11 @@ class MePage extends StatelessWidget {
         const SizedBox(height: 8),
         Text(
           name,
-          style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
         ),
         Text(
           email,
-          style: TextStyle(fontSize: 16, color: Colors.black.withOpacity(0.9)),
+          style: TextStyle(fontSize: 20, color: Colors.black.withOpacity(0.9)),
         ),
       ],
     );
@@ -60,7 +61,9 @@ class MePage extends StatelessWidget {
   Widget _buildSettingsList(BuildContext context) {
     return Column(
       children: [
-        _buildSettingsTile(Icons.person, "Edit Profile", () {}),
+        _buildSettingsTile(Icons.person, "Edit Profile", () {
+          Get.offAll(() => const EditProfilePage());
+        }),
       ],
     );
   }
