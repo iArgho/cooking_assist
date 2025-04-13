@@ -9,7 +9,7 @@ class MePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Auth().currentUser?.reload(), // 🔁 Refresh user info
+      future: Auth().currentUser?.reload(),
       builder: (context, snapshot) {
         final user = Auth().currentUser;
 

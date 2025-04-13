@@ -1,28 +1,31 @@
 import 'dart:async';
-import 'package:cooking_assist/presentation/screens/authScreens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:cooking_assist/utility/path_utility.dart';
-import 'package:get/get.dart';
+import 'package:cooking_assist/presentation/screens/authScreens/login_screen.dart';
+import 'package:cooking_assist/presentation/screens/homescreens/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  _SplashScreenState createState() => _SplashScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    goToNextScreen();
+    _goToNextScreen();
   }
 
-  void goToNextScreen() {
-    Future.delayed(const Duration(seconds: 3)).then((_) {
-      Get.offAll(const LoginPage());
+  void _goToNextScreen() {
+    Future.delayed(const Duration(seconds: 3), () {
+      final user = FirebaseAuth.instance.currentUser;
+      Get.offAll(user != null ? const HomeScreen() : const LoginPage());
     });
   }
 
@@ -32,13 +35,8 @@ class _SplashScreenState extends State<SplashScreen> {
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
-              ImagePath().logo,
-              width: 270,
-              fit: BoxFit.contain,
-            ),
+            SvgPicture.asset(ImagePath().logo, width: 270),
             const SizedBox(height: 20),
             Text(
               'Cooking Assistant',

@@ -1,4 +1,4 @@
-import 'package:cooking_assist/presentation/screens/splash_screen.dart';
+import 'package:cooking_assist/presentation/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -15,16 +15,18 @@ class CookingAssist extends StatelessWidget {
         primaryColor: const Color(0xFF0BDA51),
         scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
-          backgroundColor:   Color(0xFF0BDA51),
+          backgroundColor: Color(0xFF0BDA51),
           foregroundColor: Colors.white,
         ),
         textTheme: const TextTheme(
-          bodyLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.w300, color: Colors.black87),
-          bodyMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w200, color: Colors.black54),
+          bodyLarge: TextStyle(
+              fontSize: 18, fontWeight: FontWeight.w300, color: Colors.black87),
+          bodyMedium: TextStyle(
+              fontSize: 16, fontWeight: FontWeight.w200, color: Colors.black54),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor:  const Color(0xFF0BDA51),
+            backgroundColor: const Color(0xFF0BDA51),
             foregroundColor: Colors.white,
             textStyle: const TextStyle(fontWeight: FontWeight.w400),
           ),
@@ -33,19 +35,21 @@ class CookingAssist extends StatelessWidget {
       darkTheme: ThemeData(
         fontFamily: 'Caveat',
         brightness: Brightness.dark,
-        primaryColor:  const Color(0xFF0BDA51),
+        primaryColor: const Color(0xFF0BDA51),
         scaffoldBackgroundColor: Colors.black,
         appBarTheme: const AppBarTheme(
-          backgroundColor:  Color(0xFF0BDA51),
+          backgroundColor: Color(0xFF0BDA51),
           foregroundColor: Colors.white,
         ),
         textTheme: const TextTheme(
-          bodyLarge: TextStyle(fontSize: 18, fontWeight: FontWeight.w300, color: Colors.white),
-          bodyMedium: TextStyle(fontSize: 16, fontWeight: FontWeight.w200, color: Colors.white70),
+          bodyLarge: TextStyle(
+              fontSize: 18, fontWeight: FontWeight.w300, color: Colors.white),
+          bodyMedium: TextStyle(
+              fontSize: 16, fontWeight: FontWeight.w200, color: Colors.white70),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor:  const Color(0xFF0BDA51),
+            backgroundColor: const Color(0xFF0BDA51),
             foregroundColor: Colors.white,
           ),
         ),

@@ -1,3 +1,4 @@
+import 'package:cooking_assist/auth/auth.dart';
 import 'package:cooking_assist/presentation/screens/authScreens/login_screen.dart';
 import 'package:cooking_assist/presentation/screens/homescreens/home_page.dart';
 import 'package:cooking_assist/presentation/screens/homescreens/me_page.dart';
@@ -66,8 +67,9 @@ class _HomeScreenState extends State<HomeScreen> {
       actions: [
         IconButton(
           icon: const Icon(Icons.logout, size: 24, color: Colors.white),
-          onPressed: () {
-            Get.offAll(const LoginPage());
+          onPressed: () async {
+            await Auth().signOut();
+            Get.offAll(() => const LoginPage());
           },
         ),
       ],

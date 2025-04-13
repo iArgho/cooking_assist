@@ -1,9 +1,9 @@
-import 'package:cooking_assist/auth/auth.dart';
-import 'package:cooking_assist/presentation/screens/authScreens/signup_screen.dart'
-    show SignUpPage;
-import 'package:cooking_assist/presentation/screens/homescreens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cooking_assist/auth/auth.dart';
+import 'package:cooking_assist/presentation/screens/homescreens/home_screen.dart';
+import 'package:cooking_assist/presentation/screens/authScreens/signup_screen.dart'
+    show SignUpPage;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,9 +13,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
@@ -49,8 +49,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
-          // Avoid overflow on smaller screens
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Form(
             key: _formKey,
             child: Column(
@@ -58,9 +57,10 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Text(
                   "Login",
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
@@ -68,17 +68,13 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: InputDecoration(
                     labelText: "Email",
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                        borderRadius: BorderRadius.circular(10)),
                     prefixIcon: const Icon(Icons.email),
                   ),
                   keyboardType: TextInputType.emailAddress,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter your email";
-                    }
-                    return null;
-                  },
+                  validator: (value) => value == null || value.isEmpty
+                      ? "Please enter your email"
+                      : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -86,17 +82,13 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: InputDecoration(
                     labelText: "Password",
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                        borderRadius: BorderRadius.circular(10)),
                     prefixIcon: const Icon(Icons.lock),
                   ),
                   obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Please enter your password";
-                    }
-                    return null;
-                  },
+                  validator: (value) => value == null || value.isEmpty
+                      ? "Please enter your password"
+                      : null,
                 ),
                 const SizedBox(height: 20),
                 SizedBox(
@@ -107,9 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
-                    Get.to(() => const SignUpPage());
-                  },
+                  onPressed: () => Get.to(() => const SignUpPage()),
                   child: const Text("Don't have an account? Sign Up"),
                 ),
               ],

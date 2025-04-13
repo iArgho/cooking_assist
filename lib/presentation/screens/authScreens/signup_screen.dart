@@ -1,7 +1,7 @@
-import 'package:cooking_assist/auth/auth.dart';
-import 'package:cooking_assist/presentation/screens/homescreens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:cooking_assist/auth/auth.dart';
+import 'package:cooking_assist/presentation/screens/homescreens/home_screen.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -11,19 +11,18 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Form(
             key: _formKey,
             child: ListView(
@@ -32,60 +31,24 @@ class _SignUpPageState extends State<SignUpPage> {
                 Text(
                   "Sign Up",
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 20),
-                TextFormField(
-                  controller: _nameController,
-                  decoration: InputDecoration(
-                    labelText: "Full Name",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    prefixIcon: const Icon(Icons.person),
-                  ),
-                  validator: (value) => value == null || value.isEmpty
-                      ? "Please enter your name"
-                      : null,
-                ),
+                _inputField("Full Name", _nameController, Icons.person),
                 const SizedBox(height: 16),
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: "Email",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    prefixIcon: const Icon(Icons.email),
-                  ),
-                  validator: (value) => value == null || value.isEmpty
-                      ? "Please enter your email"
-                      : null,
-                ),
+                _inputField("Email", _emailController, Icons.email),
                 const SizedBox(height: 16),
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Password",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    prefixIcon: const Icon(Icons.lock),
-                  ),
-                  validator: (value) => value == null || value.length < 6
-                      ? "Min 6 characters"
-                      : null,
-                ),
+                _inputField("Password", _passwordController, Icons.lock,
+                    obscure: true, minLen: 6),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _confirmPasswordController,
                   obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Confirm Password",
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    prefixIcon: const Icon(Icons.lock_outline),
-                  ),
+                  decoration:
+                      _inputDecoration("Confirm Password", Icons.lock_outline),
                   validator: (value) => value != _passwordController.text
                       ? "Passwords do not match"
                       : null,
@@ -117,6 +80,33 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
       ),
+    );
+  }
+
+  InputDecoration _inputDecoration(String label, IconData icon) {
+    return InputDecoration(
+      labelText: label,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+      prefixIcon: Icon(icon),
+    );
+  }
+
+  Widget _inputField(
+      String label, TextEditingController controller, IconData icon,
+      {bool obscure = false, int minLen = 0}) {
+    return TextFormField(
+      controller: controller,
+      obscureText: obscure,
+      decoration: _inputDecoration(label, icon),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return "Please enter your ${label.toLowerCase()}";
+        }
+        if (minLen > 0 && value.length < minLen) {
+          return "Min $minLen characters";
+        }
+        return null;
+      },
     );
   }
 }

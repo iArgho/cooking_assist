@@ -29,7 +29,7 @@ class Auth {
 
   Future<void> updateDisplayName(String name) async {
     await currentUser?.updateDisplayName(name);
-    await currentUser?.reload(); // Refresh user
+    await currentUser?.reload();
   }
 
   Future<void> signOut() async {

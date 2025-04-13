@@ -108,7 +108,9 @@ class _HomePageState extends State<HomePage> {
                 item["value"]!,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                    fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white),
               ),
             ),
           );
@@ -130,12 +132,14 @@ class _HomePageState extends State<HomePage> {
       children: [
         for (int i = 0; i < 5; i++)
           ListTile(
-            leading: Icon(items[i % items.length]["icon"], size: 40, color: Theme.of(context).primaryColor),
+            leading: Icon(items[i % items.length]["icon"],
+                size: 40, color: Theme.of(context).primaryColor),
             title: Text(
               items[i % items.length]["title"]!,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
+            trailing: const Icon(Icons.arrow_forward_ios,
+                size: 18, color: Colors.grey),
             onTap: () {},
           ),
       ],
@@ -155,12 +159,14 @@ class _HomePageState extends State<HomePage> {
       children: [
         for (var recipe in newRecipes)
           ListTile(
-            leading: Icon(recipe["icon"], size: 40, color: Theme.of(context).primaryColor),
+            leading: Icon(recipe["icon"],
+                size: 40, color: Theme.of(context).primaryColor),
             title: Text(
               recipe["title"]!,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
             ),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 18, color: Colors.grey),
+            trailing: const Icon(Icons.arrow_forward_ios,
+                size: 18, color: Colors.grey),
             onTap: () {},
           ),
       ],
