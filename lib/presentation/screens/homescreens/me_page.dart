@@ -62,7 +62,10 @@ class MePage extends StatelessWidget {
     return Column(
       children: [
         _buildSettingsTile(Icons.person, "Edit Profile", () {
-          Get.offAll(() => const EditProfilePage());
+          Get.to(() => const EditProfilePage());
+        }),
+        _buildSettingsTile(Icons.restaurant_menu, "Add Recipe", () {
+          //Get.to(() => const AddRecipePage());
         }),
       ],
     );
