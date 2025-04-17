@@ -1,6 +1,7 @@
 import 'package:cooking_assist/auth/auth.dart';
 import 'package:cooking_assist/presentation/screens/authScreens/edit_profile_screen.dart';
 import 'package:cooking_assist/presentation/screens/authScreens/login_screen.dart';
+import 'package:cooking_assist/presentation/screens/recepieScreens/add_recepie_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -61,11 +62,11 @@ class MePage extends StatelessWidget {
   Widget _buildSettingsList(BuildContext context) {
     return Column(
       children: [
+        _buildSettingsTile(Icons.restaurant_menu, "Add Recipe", () {
+          Get.to(() => const AddRecipePage());
+        }),
         _buildSettingsTile(Icons.person, "Edit Profile", () {
           Get.to(() => const EditProfilePage());
-        }),
-        _buildSettingsTile(Icons.restaurant_menu, "Add Recipe", () {
-          //Get.to(() => const AddRecipePage());
         }),
       ],
     );
