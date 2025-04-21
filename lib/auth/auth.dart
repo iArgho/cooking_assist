@@ -16,10 +16,14 @@ class Auth {
     String email,
     String password,
   ) async {
-    await _firebaseAuth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } catch (e) {
+      throw Exception("Failed to register: $e");
+    }
   }
 
   // Sign in an existing user
@@ -27,21 +31,33 @@ class Auth {
     String email,
     String password,
   ) async {
-    await _firebaseAuth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    try {
+      await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } catch (e) {
+      throw Exception("Failed to sign in: $e");
+    }
   }
 
   // Update the display name of the current user
   Future<void> updateDisplayName(String name) async {
-    await currentUser?.updateDisplayName(name);
-    await currentUser?.reload(); // Refresh user data
+    try {
+      await currentUser?.updateDisplayName(name);
+      await currentUser?.reload(); // Refresh user data
+    } catch (e) {
+      throw Exception("Failed to update display name: $e");
+    }
   }
 
   // Sign out the current user
   Future<void> signOut() async {
-    await _firebaseAuth.signOut();
+    try {
+      await _firebaseAuth.signOut();
+    } catch (e) {
+      throw Exception("Failed to sign out: $e");
+    }
   }
 
   // Save a recipe to Firestore
@@ -55,13 +71,17 @@ class Auth {
     }
 
     final recipeData = {
-      'name': name,
-      'description': description,
-      'imageUrl': imageUrl ?? '', // Store an empty string if no image
-      'userId': currentUser!.uid, // Store the user ID
+      'name': name.trim(),
+      'description': description.trim(),
+      'imageUrl': imageUrl ?? '',
+      'userId': currentUser!.uid,
       'timestamp': FieldValue.serverTimestamp(),
     };
 
-    await _firestore.collection('recipes').add(recipeData);
+    try {
+      await _firestore.collection('recipes').add(recipeData);
+    } catch (e) {
+      throw Exception("Failed to save recipe: $e");
+    }
   }
 }

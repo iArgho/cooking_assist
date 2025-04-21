@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
@@ -10,103 +11,128 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
   List<Map<String, dynamic>> _filteredRecipes = [];
-
-  final List<Map<String, dynamic>> _recipes = [
-    {
-      "title": "Spaghetti Carbonara",
-      "description": "Classic Italian pasta with creamy sauce.",
-      "icon": Icons.restaurant,
-    },
-    {
-      "title": "Grilled Chicken",
-      "description": "Juicy and perfectly grilled chicken breast.",
-      "icon": Icons.local_dining,
-    },
-    {
-      "title": "Avocado Toast",
-      "description": "Healthy toast with fresh avocado and eggs.",
-      "icon": Icons.breakfast_dining,
-    },
-    {
-      "title": "Berry Smoothie",
-      "description": "A refreshing mix of berries and yogurt.",
-      "icon": Icons.local_cafe,
-    },
-  ];
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _filteredRecipes = _recipes; // Show all recipes initially
+    _searchController.addListener(() {
+      _filterRecipes(_searchController.text);
+    });
   }
 
-  void _filterRecipes(String query) {
+  Future<void> _filterRecipes(String query) async {
+    if (query.isEmpty) {
+      setState(() {
+        _filteredRecipes = [];
+      });
+      return;
+    }
+
     setState(() {
-      _filteredRecipes = _recipes
-          .where((recipe) =>
-              recipe["title"]!.toLowerCase().contains(query.toLowerCase()))
-          .toList();
+      _isLoading = true;
     });
+
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('recipes')
+          .where('name', isGreaterThanOrEqualTo: query)
+          .where('name', isLessThanOrEqualTo: '$query\uf8ff')
+          .get();
+
+      final results = snapshot.docs.map((doc) {
+        final data = doc.data();
+        return {
+          'name': data['name'] ?? '',
+          'description': data['description'] ?? '',
+          'imageUrl': data['imageUrl'] ?? '',
+        };
+      }).toList();
+
+      setState(() {
+        _filteredRecipes = results;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoading = false;
+      });
+      debugPrint('Search error: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildSearchResults() {
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (_filteredRecipes.isEmpty) {
+      return const Center(child: Text("No recipes found."));
+    }
+
+    return ListView.builder(
+      itemCount: _filteredRecipes.length,
+      itemBuilder: (context, index) {
+        final recipe = _filteredRecipes[index];
+        return Card(
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: ListTile(
+            contentPadding: const EdgeInsets.all(12),
+            leading: recipe['imageUrl'] != null && recipe['imageUrl'].isNotEmpty
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.network(
+                      recipe['imageUrl'],
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                : const Icon(Icons.fastfood, size: 40, color: Colors.grey),
+            title: Text(
+              recipe['name'],
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(
+              recipe['description'],
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // Search Bar
-        Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: TextField(
-            controller: _searchController,
-            onChanged: _filterRecipes,
-            decoration: InputDecoration(
-              hintText: "Search recipes...",
-              prefixIcon: const Icon(Icons.search),
-              filled: true,
-              fillColor: Colors.white,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25),
-                borderSide: BorderSide.none,
+    return Scaffold(
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: 'Search recipes...',
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 10),
             ),
           ),
-        ),
-
-        // Recipe List
-        Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.all(10),
-            itemCount: _filteredRecipes.length,
-            itemBuilder: (context, index) {
-              return Card(
-                elevation: 3,
-                margin: const EdgeInsets.symmetric(vertical: 8),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(10),
-                  leading: CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Theme.of(context).primaryColor,
-                    child: Icon(
-                      _filteredRecipes[index]["icon"],
-                      color: Colors.white,
-                      size: 30,
-                    ),
-                  ),
-                  title: Text(
-                    _filteredRecipes[index]["title"]!,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(_filteredRecipes[index]["description"]!),
-                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                  onTap: () {},
-                ),
-              );
-            },
-          ),
-        ),
-      ],
+          Expanded(child: _buildSearchResults()),
+        ],
+      ),
     );
   }
 }
