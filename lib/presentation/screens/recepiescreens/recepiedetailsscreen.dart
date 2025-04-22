@@ -1,4 +1,6 @@
+import 'package:cooking_assist/presentation/screens/recepiescreens/edit_recipie.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class RecipeDetailScreen extends StatelessWidget {
   final Map<String, dynamic> recipe;
@@ -7,7 +9,7 @@ class RecipeDetailScreen extends StatelessWidget {
   const RecipeDetailScreen({
     super.key,
     required this.recipe,
-    required this.recipeId, // Make sure to use recipeId if needed
+    required this.recipeId,
   });
 
   @override
@@ -19,6 +21,18 @@ class RecipeDetailScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(name),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit),
+            tooltip: 'Edit Recipe',
+            onPressed: () {
+              Get.to(() => EditRecipeScreen(
+                    recipeId: recipeId,
+                    recipe: recipe,
+                  ));
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -54,8 +68,6 @@ class RecipeDetailScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            // Optionally use the recipeId here if needed
-            // Example: Text('Recipe ID: $recipeId'),
           ],
         ),
       ),

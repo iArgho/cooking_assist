@@ -121,8 +121,7 @@ class _HomePageState extends State<HomePage> {
             controller: _pageController,
             itemCount: recipes.length,
             itemBuilder: (context, index) {
-              final data = recipes[index].data()
-                  as Map<String, dynamic>; // Cast to Map<String, dynamic>
+              final data = recipes[index].data() as Map<String, dynamic>;
               final name = data['name'] ?? "Recipe";
               final imageUrl = data['imageUrl'];
 
@@ -178,7 +177,6 @@ class _HomePageState extends State<HomePage> {
           );
         }
 
-        // Shuffle and pick 5 random recipes
         final docs = snapshot.data!.docs;
         docs.shuffle();
         final suggestions = docs.take(5).toList();
@@ -188,24 +186,73 @@ class _HomePageState extends State<HomePage> {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: suggestions.length,
           itemBuilder: (context, index) {
-            final data = suggestions[index].data()
-                as Map<String, dynamic>; // Cast to Map<String, dynamic>
+            final data = suggestions[index].data() as Map<String, dynamic>;
             final name = data['name'] ?? "Unnamed Recipe";
-            final icon = Icons.fastfood;
+            final desc = data['description'] ?? "";
+            final imageUrl = data['imageUrl'];
 
-            return ListTile(
-              leading: Icon(icon, size: 32, color: Colors.orange),
-              title: Text(name),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 18),
+            return GestureDetector(
               onTap: () {
-                final recipe = suggestions[index];
-                final recipeId = recipe.id; // Get the recipe ID
+                final recipeId = suggestions[index].id;
                 Get.to(() => RecipeDetailScreen(
-                      recipe: recipe.data()
-                          as Map<String, dynamic>, // Casting the data
-                      recipeId: recipeId, // Passing the recipe ID
+                      recipe: data,
+                      recipeId: recipeId,
                     ));
               },
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: imageUrl != null && imageUrl.isNotEmpty
+                          ? Image.network(
+                              imageUrl,
+                              width: 60,
+                              height: 60,
+                              fit: BoxFit.cover,
+                            )
+                          : Icon(Icons.fastfood,
+                              size: 40, color: Theme.of(context).primaryColor),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            desc,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(color: Colors.grey[700]),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Icon(Icons.arrow_forward_ios, size: 16),
+                  ],
+                ),
+              ),
             );
           },
         );
@@ -245,8 +292,7 @@ class _HomePageState extends State<HomePage> {
           itemCount: recipes.length,
           itemBuilder: (context, index) {
             final recipe = recipes[index];
-            final data = recipe.data()
-                as Map<String, dynamic>; // Cast to Map<String, dynamic>
+            final data = recipe.data() as Map<String, dynamic>;
             final name = data['name'] ?? "Unnamed";
             final desc = data['description'] ?? "";
             final imageUrl = data['imageUrl'];
@@ -268,7 +314,8 @@ class _HomePageState extends State<HomePage> {
                           fit: BoxFit.cover,
                         ),
                       )
-                    : const Icon(Icons.fastfood, size: 40, color: Colors.grey),
+                    : Icon(Icons.fastfood,
+                        size: 40, color: Theme.of(context).primaryColor),
                 title: Text(
                   name,
                   style: const TextStyle(fontWeight: FontWeight.bold),
@@ -279,11 +326,10 @@ class _HomePageState extends State<HomePage> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 onTap: () {
-                  final recipeId = recipe.id; // Get the recipe ID
+                  final recipeId = recipe.id;
                   Get.to(() => RecipeDetailScreen(
-                        recipe: recipe.data()
-                            as Map<String, dynamic>, // Passing the recipe data
-                        recipeId: recipeId, // Passing the recipe ID
+                        recipe: recipe.data() as Map<String, dynamic>,
+                        recipeId: recipeId,
                       ));
                 },
               ),
