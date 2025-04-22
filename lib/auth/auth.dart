@@ -60,8 +60,8 @@ class Auth {
     }
   }
 
-  // Save a recipe to Firestore
-  Future<void> saveRecipe({
+  // Save a recipe to Firestore and return the document ID
+  Future<String> saveRecipe({
     required String name,
     required String description,
     String? imageUrl,
@@ -79,9 +79,38 @@ class Auth {
     };
 
     try {
-      await _firestore.collection('recipes').add(recipeData);
+      final docRef = await _firestore.collection('recipes').add(recipeData);
+      return docRef.id;
     } catch (e) {
       throw Exception("Failed to save recipe: $e");
+    }
+  }
+
+  // Update a recipe using its ID
+  Future<void> updateRecipe({
+    required String recipeId,
+    required String name,
+    required String description,
+    String? imageUrl,
+  }) async {
+    try {
+      await _firestore.collection('recipes').doc(recipeId).update({
+        'name': name.trim(),
+        'description': description.trim(),
+        'imageUrl': imageUrl ?? '',
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      throw Exception("Failed to update recipe: $e");
+    }
+  }
+
+  // Delete a recipe using its ID
+  Future<void> deleteRecipe(String recipeId) async {
+    try {
+      await _firestore.collection('recipes').doc(recipeId).delete();
+    } catch (e) {
+      throw Exception("Failed to delete recipe: $e");
     }
   }
 }

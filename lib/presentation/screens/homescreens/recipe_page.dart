@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cooking_assist/presentation/screens/recepiescreens/recepiedetailsscreen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class RecipePage extends StatelessWidget {
   const RecipePage({super.key});
@@ -27,7 +29,10 @@ class RecipePage extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             itemCount: recipes.length,
             itemBuilder: (context, index) {
-              final data = recipes[index].data() as Map<String, dynamic>;
+              final document = recipes[index];
+              final data = document.data() as Map<String, dynamic>;
+              final recipeId = document.id;
+
               final title = data['name'] ?? 'Untitled';
               final description = data['description'] ?? '';
               final imageUrl = data['imageUrl'] ?? '';
@@ -65,7 +70,10 @@ class RecipePage extends StatelessWidget {
                   subtitle: Text(description),
                   trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                   onTap: () {
-                    // Optional: Navigate to details page
+                    Get.to(() => RecipeDetailScreen(
+                          recipe: data,
+                          recipeId: recipeId,
+                        ));
                   },
                 ),
               );

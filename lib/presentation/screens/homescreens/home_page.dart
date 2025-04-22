@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cooking_assist/presentation/screens/recepiescreens/recepiedetailsscreen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -114,12 +116,13 @@ class _HomePageState extends State<HomePage> {
         }
 
         return SizedBox(
-          height: 160,
+          height: 220,
           child: PageView.builder(
             controller: _pageController,
             itemCount: recipes.length,
             itemBuilder: (context, index) {
-              final data = recipes[index].data() as Map<String, dynamic>;
+              final data = recipes[index].data()
+                  as Map<String, dynamic>; // Cast to Map<String, dynamic>
               final name = data['name'] ?? "Recipe";
               final imageUrl = data['imageUrl'];
 
@@ -161,23 +164,50 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildSuggestionsList() {
-    final List<Map<String, dynamic>> items = [
-      {"title": "Easy Pasta Recipe", "icon": Icons.restaurant},
-      {"title": "Healthy Smoothies", "icon": Icons.local_drink},
-      {"title": "Best Baking Tips", "icon": Icons.cake},
-    ];
+    return FutureBuilder<QuerySnapshot>(
+      future: FirebaseFirestore.instance.collection('recipes').get(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: 5,
-      itemBuilder: (context, index) {
-        final item = items[index % items.length];
-        return ListTile(
-          leading: Icon(item["icon"], size: 32, color: Colors.orange),
-          title: Text(item["title"]),
-          trailing: const Icon(Icons.arrow_forward_ios, size: 18),
-          onTap: () {},
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Text("No recipe suggestions available."),
+          );
+        }
+
+        // Shuffle and pick 5 random recipes
+        final docs = snapshot.data!.docs;
+        docs.shuffle();
+        final suggestions = docs.take(5).toList();
+
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: suggestions.length,
+          itemBuilder: (context, index) {
+            final data = suggestions[index].data()
+                as Map<String, dynamic>; // Cast to Map<String, dynamic>
+            final name = data['name'] ?? "Unnamed Recipe";
+            final icon = Icons.fastfood;
+
+            return ListTile(
+              leading: Icon(icon, size: 32, color: Colors.orange),
+              title: Text(name),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 18),
+              onTap: () {
+                final recipe = suggestions[index];
+                final recipeId = recipe.id; // Get the recipe ID
+                Get.to(() => RecipeDetailScreen(
+                      recipe: recipe.data()
+                          as Map<String, dynamic>, // Casting the data
+                      recipeId: recipeId, // Passing the recipe ID
+                    ));
+              },
+            );
+          },
         );
       },
     );
@@ -215,7 +245,8 @@ class _HomePageState extends State<HomePage> {
           itemCount: recipes.length,
           itemBuilder: (context, index) {
             final recipe = recipes[index];
-            final data = recipe.data() as Map<String, dynamic>;
+            final data = recipe.data()
+                as Map<String, dynamic>; // Cast to Map<String, dynamic>
             final name = data['name'] ?? "Unnamed";
             final desc = data['description'] ?? "";
             final imageUrl = data['imageUrl'];
@@ -247,6 +278,14 @@ class _HomePageState extends State<HomePage> {
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
+                onTap: () {
+                  final recipeId = recipe.id; // Get the recipe ID
+                  Get.to(() => RecipeDetailScreen(
+                        recipe: recipe.data()
+                            as Map<String, dynamic>, // Passing the recipe data
+                        recipeId: recipeId, // Passing the recipe ID
+                      ));
+                },
               ),
             );
           },

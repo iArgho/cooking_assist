@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cooking_assist/auth/auth.dart';
 import 'package:cooking_assist/presentation/screens/homescreens/home_screen.dart';
-import 'package:cooking_assist/presentation/screens/authScreens/signup_screen.dart'
+import 'package:cooking_assist/presentation/screens/authscreens/signup_screen.dart'
     show SignUpPage;
 
 class LoginPage extends StatefulWidget {
