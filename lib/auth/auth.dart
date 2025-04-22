@@ -91,15 +91,20 @@ class Auth {
     required String recipeId,
     required String name,
     required String description,
-    String? imageUrl,
+    String? imageUrl, // optional: only update if provided
   }) async {
+    final updateData = {
+      'name': name.trim(),
+      'description': description.trim(),
+      'timestamp': FieldValue.serverTimestamp(),
+    };
+
+    if (imageUrl != null) {
+      updateData['imageUrl'] = imageUrl;
+    }
+
     try {
-      await _firestore.collection('recipes').doc(recipeId).update({
-        'name': name.trim(),
-        'description': description.trim(),
-        'imageUrl': imageUrl ?? '',
-        'timestamp': FieldValue.serverTimestamp(),
-      });
+      await _firestore.collection('recipes').doc(recipeId).update(updateData);
     } catch (e) {
       throw Exception("Failed to update recipe: $e");
     }
