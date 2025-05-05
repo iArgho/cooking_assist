@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset(ImagePath().logo, width: 270),
+            SvgPicture.asset(Paths().logo, width: 270),
             const SizedBox(height: 20),
             Text(
               'Cooking Assistant',

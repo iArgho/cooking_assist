@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cooking_assist/presentation/screens/recepiescreens/recepie_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -49,7 +48,7 @@ class _SearchPageState extends State<SearchPage> {
           'name': data['name'] ?? '',
           'description': data['description'] ?? '',
           'imageUrl': data['imageUrl'] ?? '',
-          'id': doc.id, // Include the Firestore document ID
+          'id': doc.id, //firestore id
         };
       }).toList();
 
@@ -88,7 +87,7 @@ class _SearchPageState extends State<SearchPage> {
           onTap: () {
             Get.to(() => RecipeDetailScreen(
                   recipe: recipe,
-                  recipeId: recipe['id'], // Pass the Firestore ID
+                  recipeId: recipe['id'],
                 ));
           },
           child: Card(

@@ -18,7 +18,7 @@ class CookingAssist extends StatelessWidget {
           primary: Color(0xFF0BDA51),
           secondary: Color(0xFFFFD700),
           error: Color(0xFFFF6B6B),
-          background: Color(0xFFF5F5F5),
+          surface: Color(0xFFF5F5F5),
           onPrimary: Colors.white,
         ),
         appBarTheme: const AppBarTheme(
@@ -64,7 +64,7 @@ class CookingAssist extends StatelessWidget {
           primary: Color(0xFF0BDA51),
           secondary: Color(0xFFFFD700),
           error: Color(0xFFFF6B6B),
-          background: Color(0xFF1E1E1E),
+          surface: Color(0xFF1E1E1E),
           onPrimary: Colors.white,
         ),
         appBarTheme: const AppBarTheme(

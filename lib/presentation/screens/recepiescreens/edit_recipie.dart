@@ -142,7 +142,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
         title: const Text('Edit Recipe'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.delete),
+            icon: const Icon(Icons.delete, color: Colors.red),
             tooltip: 'Delete Recipe',
             onPressed: _deleteRecipe,
           ),

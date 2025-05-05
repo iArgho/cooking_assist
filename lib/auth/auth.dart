@@ -65,6 +65,7 @@ class Auth {
     required String name,
     required String description,
     String? imageUrl,
+    required List<Map<String, String>> steps, // 🔄 New: steps support
   }) async {
     if (currentUser == null) {
       throw Exception("No user signed in.");
@@ -76,6 +77,7 @@ class Auth {
       'imageUrl': imageUrl ?? '',
       'userId': currentUser!.uid,
       'timestamp': FieldValue.serverTimestamp(),
+      'steps': steps, // 🔄 Save steps list
     };
 
     try {
@@ -92,6 +94,7 @@ class Auth {
     required String name,
     required String description,
     String? imageUrl, // optional: only update if provided
+    List<Map<String, String>>? steps, // 🔄 optional steps update
   }) async {
     final updateData = {
       'name': name.trim(),
@@ -103,6 +106,10 @@ class Auth {
       updateData['imageUrl'] = imageUrl;
     }
 
+    if (steps != null) {
+      updateData['steps'] = steps;
+    }
+
     try {
       await _firestore.collection('recipes').doc(recipeId).update(updateData);
     } catch (e) {
@@ -110,7 +117,6 @@ class Auth {
     }
   }
 
-  // Delete a recipe using its ID
   Future<void> deleteRecipe(String recipeId) async {
     try {
       await _firestore.collection('recipes').doc(recipeId).delete();
