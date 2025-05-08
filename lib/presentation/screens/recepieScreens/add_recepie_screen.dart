@@ -21,7 +21,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
   bool _isLoading = false;
 
   // Steps list: each step has a 'step' and 'time' controller
-  List<Map<String, TextEditingController>> _steps = [];
+  final List<Map<String, TextEditingController>> _steps = [];
 
   @override
   void initState() {
@@ -218,7 +218,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
                           const Divider(thickness: 1),
                         ],
                       );
-                    }).toList(),
+                    }),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: OutlinedButton.icon(
