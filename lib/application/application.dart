@@ -14,92 +14,45 @@ class CookingAssist extends StatelessWidget {
         fontFamily: 'Caveat',
         primaryColor: const Color(0xFF0BDA51),
         scaffoldBackgroundColor: Colors.white,
-        colorScheme: const ColorScheme.light(
-          primary: Color(0xFF0BDA51),
-          secondary: Color(0xFFFFD700),
-          error: Color(0xFFFF6B6B),
-          surface: Color(0xFFF5F5F5),
-          onPrimary: Colors.white,
-        ),
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFF0BDA51),
           foregroundColor: Colors.white,
-          elevation: 0,
         ),
         textTheme: const TextTheme(
-          titleLarge: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
           bodyLarge: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w400,
-            color: Colors.black87,
-          ),
+              fontSize: 18, fontWeight: FontWeight.w300, color: Colors.black87),
           bodyMedium: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w300,
-            color: Colors.black54,
-          ),
+              fontSize: 16, fontWeight: FontWeight.w200, color: Colors.black54),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF0BDA51),
             foregroundColor: Colors.white,
-            textStyle: const TextStyle(fontWeight: FontWeight.w500),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+            textStyle: const TextStyle(fontWeight: FontWeight.w400),
           ),
         ),
-        cardColor: const Color(0xFFF5F5F5),
       ),
       darkTheme: ThemeData(
         fontFamily: 'Caveat',
         brightness: Brightness.dark,
         primaryColor: const Color(0xFF0BDA51),
-        scaffoldBackgroundColor: const Color(0xFF121212),
-        colorScheme: const ColorScheme.dark(
-          primary: Color(0xFF0BDA51),
-          secondary: Color(0xFFFFD700),
-          error: Color(0xFFFF6B6B),
-          surface: Color(0xFF1E1E1E),
-          onPrimary: Colors.white,
-        ),
+        scaffoldBackgroundColor: Colors.black,
         appBarTheme: const AppBarTheme(
           backgroundColor: Color(0xFF0BDA51),
           foregroundColor: Colors.white,
-          elevation: 0,
         ),
         textTheme: const TextTheme(
-          titleLarge: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
           bodyLarge: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w400,
-            color: Colors.white,
-          ),
+              fontSize: 18, fontWeight: FontWeight.w300, color: Colors.white),
           bodyMedium: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w300,
-            color: Colors.white70,
-          ),
+              fontSize: 16, fontWeight: FontWeight.w200, color: Colors.white70),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF0BDA51),
             foregroundColor: Colors.white,
-            textStyle: const TextStyle(fontWeight: FontWeight.w500),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
           ),
         ),
-        cardColor: const Color(0xFF1E1E1E),
       ),
       themeMode: ThemeMode.system,
       home: const SplashScreen(),
