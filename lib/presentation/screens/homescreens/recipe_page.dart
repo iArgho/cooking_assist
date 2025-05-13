@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cooking_assist/presentation/screens/recepieScreens/recepie_details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class RecipePage extends StatelessWidget {
   const RecipePage({super.key});
@@ -65,7 +67,7 @@ class RecipePage extends StatelessWidget {
                   subtitle: Text(description),
                   trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                   onTap: () {
-                    // Optional: Navigate to details page
+                    Get.to(() => RecipeDetailsPage(recipe: data));
                   },
                 ),
               );

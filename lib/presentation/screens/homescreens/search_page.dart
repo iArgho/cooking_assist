@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cooking_assist/presentation/screens/recepieScreens/recepie_details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -106,6 +108,9 @@ class _SearchPageState extends State<SearchPage> {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
             ),
+            onTap: () {
+              Get.to(() => RecipeDetailsPage(recipe: recipe));
+            },
           ),
         );
       },
