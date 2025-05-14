@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cooking_assist/presentation/screens/recepieScreens/recepie_details_screen.dart';
+import 'package:cooking_assist/presentation/screens/recepiescreens/recepie_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -48,6 +48,7 @@ class _SearchPageState extends State<SearchPage> {
           'name': data['name'] ?? '',
           'description': data['description'] ?? '',
           'imageUrl': data['imageUrl'] ?? '',
+          'id': doc.id, //firestore id
         };
       }).toList();
 
@@ -82,35 +83,41 @@ class _SearchPageState extends State<SearchPage> {
       itemCount: _filteredRecipes.length,
       itemBuilder: (context, index) {
         final recipe = _filteredRecipes[index];
-        return Card(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: ListTile(
-            contentPadding: const EdgeInsets.all(12),
-            leading: recipe['imageUrl'] != null && recipe['imageUrl'].isNotEmpty
-                ? ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      recipe['imageUrl'],
-                      width: 60,
-                      height: 60,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                : const Icon(Icons.fastfood, size: 40, color: Colors.grey),
-            title: Text(
-              recipe['name'],
-              style: const TextStyle(fontWeight: FontWeight.bold),
+        return GestureDetector(
+          onTap: () {
+            Get.to(() => RecipeDetailScreen(
+                  recipe: recipe,
+                  recipeId: recipe['id'],
+                ));
+          },
+          child: Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            child: ListTile(
+              contentPadding: const EdgeInsets.all(12),
+              leading: recipe['imageUrl'] != null &&
+                      recipe['imageUrl'].isNotEmpty
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        recipe['imageUrl'],
+                        width: 60,
+                        height: 60,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  : const Icon(Icons.fastfood, size: 40, color: Colors.grey),
+              title: Text(
+                recipe['name'],
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(
+                recipe['description'],
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-            subtitle: Text(
-              recipe['description'],
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            onTap: () {
-              Get.to(() => RecipeDetailsPage(recipe: recipe));
-            },
           ),
         );
       },

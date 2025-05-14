@@ -60,11 +60,12 @@ class Auth {
     }
   }
 
-  // Save a recipe to Firestore
-  Future<void> saveRecipe({
+  // Save a recipe to Firestore and return the document ID
+  Future<String> saveRecipe({
     required String name,
     required String description,
     String? imageUrl,
+    required List<Map<String, String>> steps, // 🔄 New: steps support
   }) async {
     if (currentUser == null) {
       throw Exception("No user signed in.");
@@ -76,12 +77,51 @@ class Auth {
       'imageUrl': imageUrl ?? '',
       'userId': currentUser!.uid,
       'timestamp': FieldValue.serverTimestamp(),
+      'steps': steps, // 🔄 Save steps list
     };
 
     try {
-      await _firestore.collection('recipes').add(recipeData);
+      final docRef = await _firestore.collection('recipes').add(recipeData);
+      return docRef.id;
     } catch (e) {
       throw Exception("Failed to save recipe: $e");
+    }
+  }
+
+  // Update a recipe using its ID
+  Future<void> updateRecipe({
+    required String recipeId,
+    required String name,
+    required String description,
+    String? imageUrl, // optional: only update if provided
+    List<Map<String, String>>? steps, // 🔄 optional steps update
+  }) async {
+    final updateData = {
+      'name': name.trim(),
+      'description': description.trim(),
+      'timestamp': FieldValue.serverTimestamp(),
+    };
+
+    if (imageUrl != null) {
+      updateData['imageUrl'] = imageUrl;
+    }
+
+    if (steps != null) {
+      updateData['steps'] = steps;
+    }
+
+    try {
+      await _firestore.collection('recipes').doc(recipeId).update(updateData);
+    } catch (e) {
+      throw Exception("Failed to update recipe: $e");
+    }
+  }
+
+  Future<void> deleteRecipe(String recipeId) async {
+    try {
+      await _firestore.collection('recipes').doc(recipeId).delete();
+    } catch (e) {
+      throw Exception("Failed to delete recipe: $e");
     }
   }
 }

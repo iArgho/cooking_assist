@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:cooking_assist/utility/path_utility.dart';
-import 'package:cooking_assist/presentation/screens/authScreens/login_screen.dart';
+import 'package:cooking_assist/presentation/screens/authscreens/login_screen.dart';
 import 'package:cooking_assist/presentation/screens/homescreens/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset(ImagePath().logo, width: 270),
+            SvgPicture.asset(Paths().logo, width: 270),
             const SizedBox(height: 20),
             Text(
               'Cooking Assistant',

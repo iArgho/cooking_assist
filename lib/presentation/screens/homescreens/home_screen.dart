@@ -5,6 +5,7 @@ import 'package:cooking_assist/presentation/screens/homescreens/me_page.dart';
 import 'package:cooking_assist/presentation/screens/homescreens/recipe_page.dart';
 import 'package:cooking_assist/presentation/screens/homescreens/search_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,11 +18,11 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _pages = [
-    HomePage(),
-    RecipePage(),
-    SearchPage(),
-    MePage(),
+  static final List<Widget> _pages = [
+    const HomePage(),
+    const RecipePage(),
+    const SearchPage(),
+    const MePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -34,7 +35,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(),
-      body: _pages[_selectedIndex],
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: _pages[_selectedIndex],
+      ),
       bottomNavigationBar: _buildBottomNavBar(),
     );
   }
@@ -43,32 +47,40 @@ class _HomeScreenState extends State<HomeScreen> {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
+      systemOverlayStyle: SystemUiOverlayStyle.light,
       flexibleSpace: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
               Theme.of(context).primaryColor,
-              const Color.fromARGB(255, 29, 222, 129)
+              const Color.fromARGB(255, 29, 222, 129),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-          ),
-          borderRadius: const BorderRadius.only(
-            bottomLeft: Radius.circular(25),
-            bottomRight: Radius.circular(25),
           ),
         ),
       ),
       title: const Text(
         'Cooking Assistant',
         style: TextStyle(
-            fontSize: 30, fontWeight: FontWeight.bold, color: Colors.white),
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
       ),
       actions: [
         IconButton(
           icon: const Icon(Icons.logout, size: 24, color: Colors.white),
           onPressed: () async {
             await Auth().signOut();
+            Get.snackbar(
+              'Logged out',
+              'You have been signed out.',
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.green.shade600,
+              colorText: Colors.white,
+              margin: const EdgeInsets.all(16),
+            );
             Get.offAll(() => const LoginPage());
           },
         ),
