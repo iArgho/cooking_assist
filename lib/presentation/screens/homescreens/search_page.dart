@@ -48,7 +48,7 @@ class _SearchPageState extends State<SearchPage> {
           'name': data['name'] ?? '',
           'description': data['description'] ?? '',
           'imageUrl': data['imageUrl'] ?? '',
-          'id': doc.id, //firestore id
+          'id': doc.id,
         };
       }).toList();
 
