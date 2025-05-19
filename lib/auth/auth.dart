@@ -5,13 +5,9 @@ class Auth {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // Get the current signed-in user
   User? get currentUser => _firebaseAuth.currentUser;
-
-  // Listen to auth state changes
   Stream<User?> get authChanges => _firebaseAuth.authStateChanges();
 
-  // Create a new user account with email and password
   Future<void> createUserWithEmailAndPassword(
     String email,
     String password,
@@ -26,7 +22,6 @@ class Auth {
     }
   }
 
-  // Sign in an existing user
   Future<void> signInWithEmailAndPassword(
     String email,
     String password,
@@ -41,17 +36,15 @@ class Auth {
     }
   }
 
-  // Update the display name of the current user
   Future<void> updateDisplayName(String name) async {
     try {
       await currentUser?.updateDisplayName(name);
-      await currentUser?.reload(); // Refresh user data
+      await currentUser?.reload();
     } catch (e) {
       throw Exception("Failed to update display name: $e");
     }
   }
 
-  // Sign out the current user
   Future<void> signOut() async {
     try {
       await _firebaseAuth.signOut();
@@ -60,12 +53,10 @@ class Auth {
     }
   }
 
-  // Save a recipe to Firestore and return the document ID
   Future<String> saveRecipe({
     required String name,
     required String description,
     String? imageUrl,
-    required List<Map<String, String>> steps, // 🔄 New: steps support
   }) async {
     if (currentUser == null) {
       throw Exception("No user signed in.");
@@ -76,8 +67,7 @@ class Auth {
       'description': description.trim(),
       'imageUrl': imageUrl ?? '',
       'userId': currentUser!.uid,
-      'timestamp': FieldValue.serverTimestamp(),
-      'steps': steps, // 🔄 Save steps list
+      'createdAt': FieldValue.serverTimestamp(),
     };
 
     try {
@@ -88,26 +78,19 @@ class Auth {
     }
   }
 
-  // Update a recipe using its ID
   Future<void> updateRecipe({
     required String recipeId,
     required String name,
     required String description,
-    String? imageUrl, // optional: only update if provided
-    List<Map<String, String>>? steps, // 🔄 optional steps update
+    String? imageUrl,
   }) async {
     final updateData = {
       'name': name.trim(),
       'description': description.trim(),
-      'timestamp': FieldValue.serverTimestamp(),
     };
 
     if (imageUrl != null) {
       updateData['imageUrl'] = imageUrl;
-    }
-
-    if (steps != null) {
-      updateData['steps'] = steps;
     }
 
     try {

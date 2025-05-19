@@ -20,23 +20,10 @@ class _AddRecipePageState extends State<AddRecipePage> {
   File? _selectedImage;
   bool _isLoading = false;
 
-  // Steps list: each step has a 'step' and 'time' controller
-  List<Map<String, TextEditingController>> _steps = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _addStep(); // start with one step by default
-  }
-
   @override
   void dispose() {
     _nameController.dispose();
     _descriptionController.dispose();
-    for (var step in _steps) {
-      step['step']?.dispose();
-      step['time']?.dispose();
-    }
     super.dispose();
   }
 
@@ -68,23 +55,6 @@ class _AddRecipePageState extends State<AddRecipePage> {
     }
   }
 
-  void _addStep() {
-    setState(() {
-      _steps.add({
-        'step': TextEditingController(),
-        'time': TextEditingController(),
-      });
-    });
-  }
-
-  void _removeStep(int index) {
-    setState(() {
-      _steps[index]['step']?.dispose();
-      _steps[index]['time']?.dispose();
-      _steps.removeAt(index);
-    });
-  }
-
   void _saveRecipe() async {
     if (_formKey.currentState?.validate() ?? false) {
       setState(() => _isLoading = true);
@@ -97,20 +67,11 @@ class _AddRecipePageState extends State<AddRecipePage> {
         imageUrl = await _uploadImage(_selectedImage!);
       }
 
-      // Collect steps data
-      final stepsData = _steps
-          .map((e) => {
-                'instruction': e['step']!.text.trim(),
-                'time': e['time']!.text.trim(),
-              })
-          .toList();
-
       try {
         await Auth().saveRecipe(
           name: name,
           description: description,
           imageUrl: imageUrl,
-          steps: stepsData, // Add this to your saveRecipe method
         );
         Get.snackbar("Success", "Recipe added successfully!");
         Navigator.pop(context);
@@ -173,59 +134,6 @@ class _AddRecipePageState extends State<AddRecipePage> {
                       ),
                       validator: (value) =>
                           value!.isEmpty ? "Please enter a description" : null,
-                    ),
-                    const SizedBox(height: 24),
-                    Text("Steps",
-                        style: Theme.of(context).textTheme.titleMedium),
-                    const SizedBox(height: 8),
-                    ..._steps.asMap().entries.map((entry) {
-                      final index = entry.key;
-                      final stepController = entry.value['step']!;
-                      final timeController = entry.value['time']!;
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextFormField(
-                            controller: stepController,
-                            decoration: InputDecoration(
-                              labelText: "Step ${index + 1}",
-                              border: const OutlineInputBorder(),
-                            ),
-                            validator: (value) => value!.isEmpty
-                                ? "Enter step ${index + 1}"
-                                : null,
-                          ),
-                          const SizedBox(height: 8),
-                          TextFormField(
-                            controller: timeController,
-                            decoration: const InputDecoration(
-                              labelText: "Time (e.g. 5 min, optional)",
-                              border: OutlineInputBorder(),
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          if (_steps.length > 1)
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton.icon(
-                                onPressed: () => _removeStep(index),
-                                icon:
-                                    const Icon(Icons.delete, color: Colors.red),
-                                label: const Text("Remove",
-                                    style: TextStyle(color: Colors.red)),
-                              ),
-                            ),
-                          const Divider(thickness: 1),
-                        ],
-                      );
-                    }).toList(),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: OutlinedButton.icon(
-                        onPressed: _addStep,
-                        icon: const Icon(Icons.add),
-                        label: const Text("Add Step"),
-                      ),
                     ),
                     const SizedBox(height: 24),
                     SizedBox(
