@@ -17,6 +17,12 @@ class _AddRecipePageState extends State<AddRecipePage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final List<TextEditingController> _stepDescriptionControllers = [
+    TextEditingController()
+  ];
+  final List<TextEditingController> _stepDurationControllers = [
+    TextEditingController()
+  ];
   File? _selectedImage;
   bool _isLoading = false;
 
@@ -24,6 +30,12 @@ class _AddRecipePageState extends State<AddRecipePage> {
   void dispose() {
     _nameController.dispose();
     _descriptionController.dispose();
+    for (var controller in _stepDescriptionControllers) {
+      controller.dispose();
+    }
+    for (var controller in _stepDurationControllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -55,12 +67,40 @@ class _AddRecipePageState extends State<AddRecipePage> {
     }
   }
 
+  void _addStepField() {
+    setState(() {
+      _stepDescriptionControllers.add(TextEditingController());
+      _stepDurationControllers.add(TextEditingController());
+    });
+  }
+
+  void _removeStepField(int index) {
+    if (_stepDescriptionControllers.length > 1) {
+      setState(() {
+        _stepDescriptionControllers[index].dispose();
+        _stepDurationControllers[index].dispose();
+        _stepDescriptionControllers.removeAt(index);
+        _stepDurationControllers.removeAt(index);
+      });
+    }
+  }
+
   void _saveRecipe() async {
     if (_formKey.currentState?.validate() ?? false) {
       setState(() => _isLoading = true);
 
       final name = _nameController.text.trim();
       final description = _descriptionController.text.trim();
+      final steps = _stepDescriptionControllers.asMap().entries.map((entry) {
+        final index = entry.key;
+        final description = entry.value.text.trim();
+        final duration =
+            int.tryParse(_stepDurationControllers[index].text.trim()) ?? 0;
+        return {
+          'description': description,
+          'duration': duration,
+        };
+      }).toList();
       String? imageUrl;
 
       if (_selectedImage != null) {
@@ -72,6 +112,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
           name: name,
           description: description,
           imageUrl: imageUrl,
+          steps: steps,
         );
         Get.snackbar("Success", "Recipe added successfully!");
         Navigator.pop(context);
@@ -134,6 +175,67 @@ class _AddRecipePageState extends State<AddRecipePage> {
                       ),
                       validator: (value) =>
                           value!.isEmpty ? "Please enter a description" : null,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      "Steps",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    ..._stepDescriptionControllers.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final descController = entry.value;
+                      final durationController =
+                          _stepDurationControllers[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 3,
+                              child: TextFormField(
+                                controller: descController,
+                                decoration: InputDecoration(
+                                  labelText: "Step ${index + 1} Description",
+                                  border: const OutlineInputBorder(),
+                                ),
+                                validator: (value) => value!.isEmpty
+                                    ? "Please enter a step description"
+                                    : null,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              flex: 1,
+                              child: TextFormField(
+                                controller: durationController,
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  labelText: "Min",
+                                  border: const OutlineInputBorder(),
+                                ),
+                                validator: (value) {
+                                  if (value!.isEmpty) return "Enter duration";
+                                  if (int.tryParse(value) == null ||
+                                      int.parse(value) < 0) return "Invalid";
+                                  return null;
+                                },
+                              ),
+                            ),
+                            if (_stepDescriptionControllers.length > 1)
+                              IconButton(
+                                icon: const Icon(Icons.remove_circle,
+                                    color: Colors.red),
+                                onPressed: () => _removeStepField(index),
+                              ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                    TextButton.icon(
+                      onPressed: _addStepField,
+                      icon: const Icon(Icons.add),
+                      label: const Text("Add Step"),
                     ),
                     const SizedBox(height: 24),
                     SizedBox(

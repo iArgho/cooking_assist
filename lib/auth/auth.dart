@@ -57,6 +57,7 @@ class Auth {
     required String name,
     required String description,
     String? imageUrl,
+    required List<Map<String, dynamic>> steps,
   }) async {
     if (currentUser == null) {
       throw Exception("No user signed in.");
@@ -67,6 +68,7 @@ class Auth {
       'description': description.trim(),
       'imageUrl': imageUrl ?? '',
       'userId': currentUser!.uid,
+      'steps': steps,
       'createdAt': FieldValue.serverTimestamp(),
     };
 
@@ -83,10 +85,12 @@ class Auth {
     required String name,
     required String description,
     String? imageUrl,
+    required List<Map<String, dynamic>> steps,
   }) async {
     final updateData = {
       'name': name.trim(),
       'description': description.trim(),
+      'steps': steps,
     };
 
     if (imageUrl != null) {

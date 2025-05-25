@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:cooking_assist/utility/path_utility.dart';
 import 'package:cooking_assist/presentation/screens/authscreens/login_screen.dart';
 import 'package:cooking_assist/presentation/screens/homescreens/home_screen.dart';
 
@@ -36,7 +34,11 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SvgPicture.asset(Paths().logo, width: 270),
+            Icon(
+              Icons.restaurant_menu,
+              size: 100,
+              color: Theme.of(context).primaryColor,
+            ),
             const SizedBox(height: 20),
             Text(
               'Cooking Assistant',

@@ -23,6 +23,8 @@ class EditRecipeScreen extends StatefulWidget {
 class _EditRecipeScreenState extends State<EditRecipeScreen> {
   late TextEditingController _nameController;
   late TextEditingController _descController;
+  late List<TextEditingController> _stepDescriptionControllers;
+  late List<TextEditingController> _stepDurationControllers;
   File? _selectedImage;
   bool _isLoading = false;
   late String _existingImageUrl;
@@ -33,6 +35,20 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
     _nameController = TextEditingController(text: widget.recipe['name']);
     _descController = TextEditingController(text: widget.recipe['description']);
     _existingImageUrl = widget.recipe['imageUrl'] ?? '';
+    _stepDescriptionControllers = [];
+    _stepDurationControllers = [];
+    final steps = (widget.recipe['steps'] as List<dynamic>?) ?? [];
+    if (steps.isEmpty) {
+      _stepDescriptionControllers.add(TextEditingController());
+      _stepDurationControllers.add(TextEditingController());
+    } else {
+      for (var step in steps) {
+        _stepDescriptionControllers.add(
+            TextEditingController(text: step['description']?.toString() ?? ''));
+        _stepDurationControllers.add(
+            TextEditingController(text: step['duration']?.toString() ?? '0'));
+      }
+    }
   }
 
   Future<void> _pickImage() async {
@@ -72,6 +88,17 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
         }
       }
 
+      final steps = _stepDescriptionControllers.asMap().entries.map((entry) {
+        final index = entry.key;
+        final description = entry.value.text.trim();
+        final duration =
+            int.tryParse(_stepDurationControllers[index].text.trim()) ?? 0;
+        return {
+          'description': description,
+          'duration': duration,
+        };
+      }).toList();
+
       await FirebaseFirestore.instance
           .collection('recipes')
           .doc(widget.recipeId)
@@ -79,6 +106,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
         'name': _nameController.text.trim(),
         'description': _descController.text.trim(),
         'imageUrl': imageUrl,
+        'steps': steps,
         'timestamp': FieldValue.serverTimestamp(),
       });
 
@@ -122,10 +150,34 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
     }
   }
 
+  void _addStepField() {
+    setState(() {
+      _stepDescriptionControllers.add(TextEditingController());
+      _stepDurationControllers.add(TextEditingController());
+    });
+  }
+
+  void _removeStepField(int index) {
+    if (_stepDescriptionControllers.length > 1) {
+      setState(() {
+        _stepDescriptionControllers[index].dispose();
+        _stepDurationControllers[index].dispose();
+        _stepDescriptionControllers.removeAt(index);
+        _stepDurationControllers.removeAt(index);
+      });
+    }
+  }
+
   @override
   void dispose() {
     _nameController.dispose();
     _descController.dispose();
+    for (var controller in _stepDescriptionControllers) {
+      controller.dispose();
+    }
+    for (var controller in _stepDurationControllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -176,6 +228,54 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
               controller: _descController,
               maxLines: 4,
               decoration: const InputDecoration(labelText: 'Description'),
+            ),
+            const SizedBox(height: 12),
+            const Text(
+              "Steps",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            ..._stepDescriptionControllers.asMap().entries.map((entry) {
+              final index = entry.key;
+              final descController = entry.value;
+              final durationController = _stepDurationControllers[index];
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: TextField(
+                        controller: descController,
+                        decoration: InputDecoration(
+                          labelText: "Step ${index + 1} Description",
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      flex: 1,
+                      child: TextField(
+                        controller: durationController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          labelText: "Min",
+                        ),
+                      ),
+                    ),
+                    if (_stepDescriptionControllers.length > 1)
+                      IconButton(
+                        icon:
+                            const Icon(Icons.remove_circle, color: Colors.red),
+                        onPressed: () => _removeStepField(index),
+                      ),
+                  ],
+                ),
+              );
+            }).toList(),
+            TextButton.icon(
+              onPressed: _addStepField,
+              icon: const Icon(Icons.add),
+              label: const Text("Add Step"),
             ),
             const SizedBox(height: 24),
             _isLoading

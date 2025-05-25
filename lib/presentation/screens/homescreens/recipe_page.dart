@@ -31,7 +31,6 @@ class _RecipePageState extends State<RecipePage> {
 
           final recipes = snapshot.data!.docs;
 
-          // Ensure expandedStates list matches number of recipes
           if (_expandedStates.length != recipes.length) {
             _expandedStates = List.generate(recipes.length, (_) => false);
           }
@@ -65,8 +64,7 @@ class _RecipePageState extends State<RecipePage> {
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Row(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.center, // center image
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         imageUrl.isNotEmpty
                             ? ClipRRect(
