@@ -210,9 +210,9 @@ class _AddRecipePageState extends State<AddRecipePage> {
                               child: TextFormField(
                                 controller: durationController,
                                 keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: "Min",
-                                  border: const OutlineInputBorder(),
+                                  border: OutlineInputBorder(),
                                 ),
                                 validator: (value) {
                                   if (value!.isEmpty) return "Enter duration";
@@ -231,7 +231,7 @@ class _AddRecipePageState extends State<AddRecipePage> {
                           ],
                         ),
                       );
-                    }).toList(),
+                    }),
                     TextButton.icon(
                       onPressed: _addStepField,
                       icon: const Icon(Icons.add),

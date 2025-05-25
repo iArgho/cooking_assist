@@ -271,7 +271,7 @@ class _EditRecipeScreenState extends State<EditRecipeScreen> {
                   ],
                 ),
               );
-            }).toList(),
+            }),
             TextButton.icon(
               onPressed: _addStepField,
               icon: const Icon(Icons.add),
