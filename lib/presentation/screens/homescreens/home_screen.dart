@@ -52,8 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Theme.of(context).primaryColor,
-              const Color.fromARGB(255, 29, 222, 129),
+              Theme.of(context).primaryColor, // #FD5523
+              const Color(0xFFFFA06B), // lighter orange shade
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
               'Logged out',
               'You have been signed out.',
               snackPosition: SnackPosition.BOTTOM,
-              backgroundColor: Colors.green.shade600,
+              backgroundColor: const Color(0xFFFD5523), // primary orange
               colorText: Colors.white,
               margin: const EdgeInsets.all(16),
             );
