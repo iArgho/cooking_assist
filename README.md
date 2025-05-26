@@ -1,7 +1,3 @@
-Here’s a polished and GitHub-friendly README.md section for your Cooking Assist app, including refined grammar, markdown formatting, and a placeholder for screenshots:
-
-⸻
-
 🍳 Cooking Assist – Your Kitchen Companion
 
 Package: cooking_assist
